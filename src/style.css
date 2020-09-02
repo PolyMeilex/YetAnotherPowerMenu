@@ -1,0 +1,37 @@
+#root-window {
+  background-color: rgba(0, 0, 0, 0.7);
+  animation: intro 2s;
+}
+#root-box {
+  margin-bottom: 100px;
+}
+
+#time {
+  font-size: 100px;
+  color: white;
+}
+
+#date {
+  font-size: 20px;
+  font-weight: 300;
+  color: white;
+}
+
+.btn {
+  background: white;
+  background-color: white;
+  color: black;
+  border-radius: 5px;
+  padding: 20px;
+
+  font-size: 20px;
+}
+
+@keyframes intro {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
