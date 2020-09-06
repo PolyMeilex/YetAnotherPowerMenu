@@ -1,0 +1,30 @@
+Config(
+    time_format: "%H:%M:%S",
+    date_format: "%A, %d %B %Y",
+
+    buttons: [
+        Button(
+            icon: "system-reboot-symbolic",
+            event: Reboot,
+            key: "j",
+        ),
+        Button(
+            icon: "system-lock-screen-symbolic",
+            event: Lock,
+            key: "k",
+        ),
+        Button(
+            icon: "system-log-out-symbolic",
+            event: Logout,
+            key: "l",
+        ),
+        Button(
+            icon: "system-shutdown-symbolic",
+            event: Shutdown,
+            key: "semicolon"
+        ),
+    ],
+
+)
+
+
