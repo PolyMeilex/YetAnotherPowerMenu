@@ -73,38 +73,48 @@ fn default_date_format() -> String {
 }
 
 impl Config {
-    pub fn new() -> Self {
-        Self {
-            time_format: default_time_format(),
-            date_format: default_date_format(),
-            buttons: Vec::new(),
-        }
-    }
-    pub fn deserialize() -> Self {
-        let input = include_str!("./config.ron");
-
+    pub fn deserialize(input: &str) -> Self {
         let ron: Self = match ron::from_str(&input) {
             Ok(ron) => ron,
             Err(err) => {
-                use gtk::prelude::*;
-
                 let msg = format!("{:#?}", err);
-
-                let d = gtk::MessageDialogBuilder::new()
-                    .message_type(gtk::MessageType::Error)
-                    .buttons(gtk::ButtonsType::Ok)
-                    .text(&msg)
-                    .build();
-
-                d.run();
-                unsafe { d.destroy() };
-
+                crate::quick_dialog(&msg);
                 panic!("{}", msg);
             }
         };
 
         ron
     }
+}
+
+pub fn get_config() -> (Config, Vec<u8>) {
+    let config_dir = config_dir();
+
+    let default_config = include_str!("./config.ron");
+    let default_style = include_bytes!("./style.css");
+
+    let (ron_str, style_str) = if let Some(config_dir) = config_dir {
+        let bar_config_dir = config_dir.join("YetAnotherPowerMenu");
+        let _ = std::fs::create_dir_all(&bar_config_dir);
+        let ron_str: String =
+            if let Ok(file) = std::fs::read_to_string(&bar_config_dir.join("config.ron")) {
+                file
+            } else {
+                default_config.into()
+            };
+        let style_str = if let Ok(file) = std::fs::read(&bar_config_dir.join("style.css")) {
+            file
+        } else {
+            default_style.to_vec()
+        };
+        (ron_str, style_str)
+    } else {
+        (default_config.into(), default_style.to_vec())
+    };
+
+    let decoded = Config::deserialize(&ron_str);
+
+    (decoded, style_str)
 }
 
 use std::path::PathBuf;

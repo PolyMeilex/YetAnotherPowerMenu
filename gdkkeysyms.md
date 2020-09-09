@@ -1,3 +1,4 @@
+```
 enum Key
 {
     VoidSymbol = 0xffffff,
@@ -2279,3 +2280,4 @@ enum Key
     LogWindowTree = 0x1008fe24,
     LogGrabInfo = 0x1008fe25
 };
+```

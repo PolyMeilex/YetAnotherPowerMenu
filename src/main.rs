@@ -1,5 +1,3 @@
-use gio::prelude::*;
-
 mod app;
 mod state;
 mod ui;
@@ -7,13 +5,37 @@ mod ui;
 mod config;
 
 fn main() {
-    let app = gtk::ApplicationBuilder::new().application_id("io.github.polymeilex.yal").build();
+    gtk::init().unwrap();
 
-    app.connect_activate(|app| {
-        let config = config::Config::deserialize();
-        let app = app::App::new(app, config);
-        app.connect();
-    });
+    let (config, style) = config::get_config();
+    // Stylesheet
+    {
+        use gtk::prelude::*;
 
-    app.run(&std::env::args().collect::<Vec<_>>());
+        let style_provider = gtk::CssProvider::new();
+        style_provider.load_from_data(&style).unwrap();
+        gtk::StyleContext::add_provider_for_screen(
+            &gdk::Screen::get_default().unwrap(),
+            &style_provider,
+            gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
+        );
+    }
+
+    let app = app::App::new(config);
+    app.connect();
+
+    gtk::main();
+}
+
+pub fn quick_dialog(msg: &str) {
+    use gtk::prelude::*;
+
+    let d = gtk::MessageDialogBuilder::new()
+        .message_type(gtk::MessageType::Error)
+        .buttons(gtk::ButtonsType::Ok)
+        .text(msg)
+        .build();
+
+    d.run();
+    unsafe { d.destroy() };
 }

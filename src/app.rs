@@ -12,25 +12,9 @@ pub struct App {
 }
 
 impl App {
-    pub fn new(app: &gtk::Application, config: Config) -> Self {
-        // Stylesheet
-        {
-            // let file = std::fs::read("/home/poly/Documents/rust/YetAnotherPowerMenu/src/style.css")
-            //     .unwrap();
-
-            let file = include_bytes!("style.css");
-
-            let style_provider = gtk::CssProvider::new();
-            style_provider.load_from_data(file).unwrap();
-            gtk::StyleContext::add_provider_for_screen(
-                &gdk::Screen::get_default().unwrap(),
-                &style_provider,
-                gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
-            );
-        }
-
+    pub fn new(config: Config) -> Self {
         Self {
-            ui: Rc::new(GtkUi::new(app, &config)),
+            ui: Rc::new(GtkUi::new(&config)),
             state: Rc::new(RefCell::new(State::new())),
             config: Rc::new(config),
         }
@@ -95,5 +79,9 @@ impl App {
                 state.event(&ui, event.clone());
             });
         }
+
+        self.ui.gtk_window.connect_destroy(|_| {
+            gtk::main_quit();
+        });
     }
 }

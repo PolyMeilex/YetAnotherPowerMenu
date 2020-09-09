@@ -5,7 +5,7 @@ use gtk::prelude::*;
 
 pub struct GtkUi {
     /// Main Window
-    pub gtk_window: gtk::ApplicationWindow,
+    pub gtk_window: gtk::Window,
     /// Window Geometry
     /// (x,y,w,h)
     pub window_geometry: (i32, i32, i32, i32),
@@ -16,10 +16,9 @@ pub struct GtkUi {
 }
 
 impl GtkUi {
-    pub fn new(app: &gtk::Application, config: &Config) -> Self {
+    pub fn new(config: &Config) -> Self {
         let gtk_window = {
-            let gtk_window = gtk::ApplicationWindowBuilder::new()
-                .application(app)
+            let gtk_window = gtk::WindowBuilder::new()
                 .name("root-window")
                 .type_(gtk::WindowType::Popup)
                 .window_position(gtk::WindowPosition::Center)
@@ -87,13 +86,13 @@ impl GtkUi {
 
                 atempts += 1;
 
-                // Let's wait 500ms in hope that grab will be posible later
-                std::thread::sleep(std::time::Duration::from_millis(500));
+                // Let's wait 100ms in hope that grab will be posible later
+                std::thread::sleep(std::time::Duration::from_millis(100));
 
-                // Let make shure that we don't block the user view if something goes wrong, after 5s of attempts we should give up and go away.
+                // Let make shure that we don't block the user view if something goes wrong, after 1s of attempts we should give up and go away.
                 // Otherwise, the user will have to deal with an unresponsive window that obscures the whole view himself, we definitely don't want that to happen XD
                 if atempts > 10 {
-                    panic!("Grab attempts exceeded 10 (5s)");
+                    panic!("Grab attempts exceeded 10 (1s)");
                 }
             }
         }
@@ -183,7 +182,7 @@ impl ButtonGroupWidget {
 }
 
 /// Set visual for window (used for transparency)
-fn set_visual(window: &gtk::ApplicationWindow, _screen: Option<&gdk::Screen>) {
+fn set_visual(window: &gtk::Window, _screen: Option<&gdk::Screen>) {
     if let Some(screen) = window.get_screen() {
         if let Some(ref visual) = screen.get_rgba_visual() {
             window.set_visual(Some(visual));
