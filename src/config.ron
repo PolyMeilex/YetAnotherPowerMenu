@@ -9,20 +9,25 @@ Config(
             key: "j",
         ),
         Button(
+            icon: "media-playback-pause",
+            event: Suspend,
+            key: "k",
+        ),
+        Button(
             icon: "system-reboot-symbolic",
             event: Reboot,
-            key: "k",
+            key: "l",
         ),
         Button(
             icon: "system-shutdown-symbolic",
             event: Shutdown,
-            key: "l",
+            key: "semicolon",
         ),
-        Button(
-            icon: "system-log-out-symbolic",
-            event: Logout,
-            key: "semicolon"
-        ),
+        //Button(
+        //    icon: "system-log-out-symbolic",
+        //    event: Logout,
+        //    key: "semicolon"
+       	//),
     ],
 
 )

@@ -23,13 +23,28 @@ impl State {
                     .ok();
             }
             Logout => {
-                std::process::Command::new("i3-msg").arg("exit").spawn().ok();
+                std::process::Command::new("i3-msg")
+                    .arg("exit")
+                    .spawn()
+                    .ok();
             }
             Reboot => {
                 std::process::Command::new("reboot").spawn().ok();
             }
             Shutdown => {
                 std::process::Command::new("poweroff").spawn().ok();
+            }
+            Suspend => {
+                std::process::Command::new("suspend").spawn().ok();
+            }
+            Custom(c) => {
+                let mut command = c.into_iter();
+                let program = command.next();
+
+                if let Some(program) = program {
+                    let args: Vec<String> = command.collect();
+                    std::process::Command::new(&program).args(args).spawn().ok();
+                }
             }
         }
     }

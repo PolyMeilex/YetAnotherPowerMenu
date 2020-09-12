@@ -8,6 +8,8 @@ pub enum Event {
     Logout,
     Reboot,
     Shutdown,
+    Suspend,
+    Custom(Vec<String>),
 }
 
 /// Config of gtk button
