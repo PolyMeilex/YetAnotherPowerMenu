@@ -28,6 +28,11 @@ Config(
         //    event: Logout,
         //    key: "semicolon"
        	//),
+        //Button(
+        //    icon: "system-log-out-symbolic",
+        //    event: Custom(["systemctl","reboot"]),
+        //    key: "semicolon"
+       	//),
     ],
 
 )

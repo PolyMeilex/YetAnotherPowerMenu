@@ -9,11 +9,10 @@ impl State {
     }
 
     pub fn event(&mut self, ui: &crate::ui::GtkUi, e: Event) {
+        ui.gtk_window.close();
         use Event::*;
         match e {
             Lock => {
-                ui.gtk_window.close();
-
                 std::process::Command::new("i3lock")
                     .arg("-c")
                     .arg("000000")
@@ -29,13 +28,22 @@ impl State {
                     .ok();
             }
             Reboot => {
-                std::process::Command::new("reboot").spawn().ok();
+                std::process::Command::new("systemctl")
+                    .arg("reboot")
+                    .spawn()
+                    .ok();
             }
             Shutdown => {
-                std::process::Command::new("poweroff").spawn().ok();
+                std::process::Command::new("systemctl")
+                    .arg("poweroff")
+                    .spawn()
+                    .ok();
             }
             Suspend => {
-                std::process::Command::new("suspend").spawn().ok();
+                std::process::Command::new("systemctl")
+                    .arg("suspend")
+                    .spawn()
+                    .ok();
             }
             Custom(c) => {
                 let mut command = c.into_iter();
