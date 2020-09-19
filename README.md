@@ -15,7 +15,7 @@ It will be up on AUR someday
 
 # Example Config
 
-```rs
+```rust
 Config(
     time_format: "%H:%M:%S",
     date_format: "%A, %d %B %Y",
