@@ -1,11 +1,13 @@
 use crate::config::Event;
 use gtk::prelude::*;
 
-pub struct State {}
+pub struct State {
+    last_key: Option<usize>,
+}
 
 impl State {
     pub fn new() -> Self {
-        Self {}
+        Self { last_key: None }
     }
 
     pub fn event(&mut self, ui: &crate::ui::GtkUi, e: Event) {
@@ -55,5 +57,15 @@ impl State {
                 }
             }
         }
+    }
+
+    pub fn key_event(&mut self, ui: &crate::ui::GtkUi, id: usize, e: Event) {
+        if let Some(last_key) = self.last_key {
+            if last_key == id {
+                self.event(ui, e);
+            }
+        }
+
+        self.last_key = Some(id);
     }
 }

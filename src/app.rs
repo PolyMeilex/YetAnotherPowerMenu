@@ -51,9 +51,9 @@ impl App {
                 let mut state = state.borrow_mut();
                 let win = &ui.gtk_window;
 
-                for btn in config.buttons.iter() {
+                for (id, btn) in config.buttons.iter().enumerate() {
                     match &ev {
-                        ev if { ev == &*btn.key } => state.event(&ui, btn.event.clone()),
+                        ev if { ev == &*btn.key } => state.key_event(&ui, id, btn.event.clone()),
                         &gdk::keys::constants::Escape => win.close(),
                         _ => {}
                     }
